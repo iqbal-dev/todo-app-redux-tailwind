@@ -21,12 +21,22 @@ const todoSlice = createSlice({
       const id = generateRandomBase36();
       state.todos.push({ ...action.payload, id, isCompleted: false });
     },
-    deleteTodo: (state, action) => {
+    deleteTodo: (state, action: PayloadAction<string>) => {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+    },
+    toggleTodo: (state, action: PayloadAction<string>) => {
+      state.todos = state.todos
+        .map((todo) => {
+          if (todo.id === action.payload) {
+            return { ...todo, isCompleted: !todo.isCompleted };
+          }
+          return todo;
+        })
+        .sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted));
     },
   },
 });
 
-export const { addTodo, deleteTodo } = todoSlice.actions;
+export const { addTodo, deleteTodo, toggleTodo } = todoSlice.actions;
 
 export default todoSlice.reducer;
