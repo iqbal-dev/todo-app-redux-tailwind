@@ -1,8 +1,10 @@
+import { generateRandomBase36 } from "@/utils/generateRandomBase36";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type TTodo = {
-  id: number;
+  id?: string;
   title: string;
-  isCompleted: boolean;
+  description: string;
+  isCompleted?: boolean;
 };
 
 type TInitialState = {
@@ -16,7 +18,8 @@ const todoSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state: TInitialState, action: PayloadAction<TTodo>) => {
-      state.todos.push(action.payload);
+      const id = generateRandomBase36();
+      state.todos.push({ ...action.payload, id, isCompleted: false });
     },
     deleteTodo: (state, action) => {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
