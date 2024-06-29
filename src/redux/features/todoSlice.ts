@@ -4,6 +4,7 @@ type TTodo = {
   id?: string;
   title: string;
   description: string;
+  priority: string;
   isCompleted?: boolean;
 };
 
@@ -25,14 +26,12 @@ const todoSlice = createSlice({
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
     },
     toggleTodo: (state, action: PayloadAction<string>) => {
-      state.todos = state.todos
-        .map((todo) => {
-          if (todo.id === action.payload) {
-            return { ...todo, isCompleted: !todo.isCompleted };
-          }
-          return todo;
-        })
-        .sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted));
+      state.todos = state.todos.map((todo) => {
+        if (todo.id === action.payload) {
+          return { ...todo, isCompleted: !todo.isCompleted };
+        }
+        return todo;
+      });
     },
   },
 });
