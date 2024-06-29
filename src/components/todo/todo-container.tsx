@@ -1,12 +1,28 @@
+import { useGetTodoQuery } from "@/redux/api/api";
 import { useAppSelector } from "@/redux/hooks";
+import { useMemo } from "react";
+import DataLoader from "../ui/data-loader";
 import { TodoAddModal } from "./todo-add-modal";
 import TodoCard from "./todo-card";
 import { TodoFilter } from "./todo-filter";
 import TodoNotFound from "./todo-not-found";
 
 export default function TodoContainer() {
-  const { todos } = useAppSelector((state) => state.todos);
-  console.log("🚀 ~ TodoAddModal ~ todos:", todos);
+  const todos = useAppSelector((state) => state.todos.todos);
+  const { isLoading } = useGetTodoQuery(undefined);
+
+  const todoCards = useMemo(() => {
+    return todos.map(({ id, description, isCompleted }) => (
+      <TodoCard
+        key={id}
+        id={id}
+        title={description}
+        isCompleted={isCompleted}
+        description={description}
+      />
+    ));
+  }, [todos]);
+
   return (
     <div>
       <div className="mb-5 flex justify-between">
@@ -15,16 +31,10 @@ export default function TodoContainer() {
       </div>
       <div className="bg-primary-gradient rounded-xl p-[5px]">
         <div className="bg-white rounded-lg p-5 space-y-3">
-          {todos.length ? (
-            todos.map((todo) => (
-              <TodoCard
-                key={todo.id}
-                id={todo.id}
-                title={todo.description}
-                isCompleted={todo.isCompleted}
-                description={todo.description}
-              />
-            ))
+          {isLoading ? (
+            <DataLoader />
+          ) : todos.length ? (
+            todoCards
           ) : (
             <TodoNotFound />
           )}

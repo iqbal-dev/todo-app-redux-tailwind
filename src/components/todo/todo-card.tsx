@@ -19,14 +19,14 @@ export default function TodoCard({
   return (
     <div className="flex justify-between bg-white p-5 rounded-lg border">
       <input
-        className="cursor-pointer"
+        className="cursor-pointer mr-2"
         onChange={() => dispatch(toggleTodo(id as string))}
         type="checkbox"
         checked={isCompleted}
       />
-      <p className="font-semibold">{title}</p>
-      <p>{description}</p>
-      <div>
+      <p className="flex-1 font-semibold">{title}</p>
+      <p className="flex-1">{description}</p>
+      <div className="flex-1">
         {isCompleted ? (
           <p className="text-green-500">Done</p>
         ) : (
